@@ -18,3 +18,9 @@ services:
         value: 2
       - key: ALLOWED_HOSTS
         value: ".onrender.com"
+      - key: ADMIN_EMAIL
+        value: admin@autocare.com
+      - key: ADMIN_PASSWORD
+        value: admin123
+      - key: ADMIN_NAME
+        value: Admin
