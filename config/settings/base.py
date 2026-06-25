@@ -143,5 +143,7 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
-CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", default="").split(",")
+CORS_ALLOWED_ORIGINS = [
+    o.strip() for o in config("CORS_ALLOWED_ORIGINS", default="").split(",") if o.strip()
+]
 CORS_ALLOW_CREDENTIALS = True
