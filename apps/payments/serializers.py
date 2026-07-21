@@ -8,6 +8,7 @@ class PaymentSerializer(serializers.ModelSerializer):
         model = Payment
         fields = "__all__"
         read_only_fields = ("id", "created_at")
+        
 
 
 class PaymentCreateSerializer(serializers.Serializer):
