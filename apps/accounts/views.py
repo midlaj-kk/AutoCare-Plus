@@ -47,4 +47,4 @@ class MeView(viewsets.ViewSet):
 
     def list(self, request):
         serializer = UserSerializer(request.user)
-        return Response({"success": True, "message": "Profile fetched", "data": serializer.data})
+        return Response(serializer.data)

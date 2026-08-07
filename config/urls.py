@@ -16,6 +16,7 @@ from apps.parts_used.views import PartUsedViewSet
 from apps.quality_check.views import QualityCheckViewSet
 from apps.billing.views import BillViewSet
 from apps.payments.views import PaymentViewSet
+from apps.payments.razorpay_views import RazorpayViewSet, RazorpayWebhookView
 from apps.delivery.views import DeliveryViewSet
 from apps.mechanics.views import MechanicViewSet
 from apps.service_history.views import VehicleHistoryView, CustomerHistoryView
@@ -36,6 +37,7 @@ router.register(r"parts-used", PartUsedViewSet, basename="parts-used")
 router.register(r"quality-checks", QualityCheckViewSet)
 router.register(r"bills", BillViewSet)
 router.register(r"payments", PaymentViewSet)
+router.register(r"razorpay", RazorpayViewSet, basename="razorpay")
 router.register(r"delivery", DeliveryViewSet)
 router.register(r"mechanics", MechanicViewSet)
 
@@ -50,6 +52,7 @@ urlpatterns = [
     path("api/v1/auth/me/", MeView.as_view({"get": "list"}), name="me"),
     path("api/v1/", include(accounts_router.urls)),
     path("api/v1/", include(router.urls)),
+    path("api/v1/razorpay/webhook/", RazorpayWebhookView.as_view(), name="razorpay-webhook"),
     path("api/v1/vehicles/<int:vehicle_id>/history/", VehicleHistoryView.as_view(), name="vehicle-history"),
     path("api/v1/vehicles/history/", VehicleHistoryView.as_view(), name="vehicle-history-search"),
     path("api/v1/customers/<int:customer_id>/history/", CustomerHistoryView.as_view(), name="customer-history"),

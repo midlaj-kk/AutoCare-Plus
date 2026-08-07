@@ -147,3 +147,8 @@ CORS_ALLOWED_ORIGINS = [
     o.strip() for o in config("CORS_ALLOWED_ORIGINS", default="").split(",") if o.strip()
 ]
 CORS_ALLOW_CREDENTIALS = True
+
+RAZORPAY_KEY_ID = config("RAZORPAY_KEY_ID", default="")
+RAZORPAY_KEY_SECRET = config("RAZORPAY_KEY_SECRET", default="")
+RAZORPAY_WEBHOOK_SECRET = config("RAZORPAY_WEBHOOK_SECRET", default="")
+RAZORPAY_CURRENCY = config("RAZORPAY_CURRENCY", default="INR")
