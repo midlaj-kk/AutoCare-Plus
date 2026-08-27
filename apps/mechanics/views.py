@@ -15,7 +15,14 @@ class MechanicViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     filter_backends = [SearchFilter]
     search_fields = ["name", "email", "phone"]
-    permission_classes = [IsAdmin]
+
+    def get_permissions(self):
+        # Service Advisors may read the mechanic list so they can assign a
+        # mechanic while creating a service job. Only admins may create,
+        # update, or delete mechanics.
+        if self.action in ("list", "retrieve"):
+            return [IsServiceAdvisor()]
+        return [IsAdmin()]
 
     def get_serializer_class(self):
         if self.action == "create":
