@@ -1,6 +1,7 @@
 from django.db.models import Count, Sum, Q, F
 from django.utils import timezone
 from apps.service_jobs.models import ServiceJob
+from apps.service_jobs.serializers import ServiceJobSerializer
 from apps.billing.models import Bill
 from apps.inventory.models import SparePart
 
@@ -20,4 +21,9 @@ def get_admin_summary():
         "low_stock_items": SparePart.objects.filter(
             stock_quantity__lte=F("minimum_stock"), status="active"
         ).count(),
+        "recent_jobs": ServiceJobSerializer(
+            ServiceJob.objects.select_related("vehicle__customer")
+            .order_by("-created_at")[:10],
+            many=True,
+        ).data,
     }
