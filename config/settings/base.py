@@ -78,11 +78,12 @@ import dj_database_url
 
 DATABASE_URL = config("DATABASE_URL", default=None)
 if DATABASE_URL:
+    _is_local = any(h in DATABASE_URL for h in ("localhost", "127.0.0.1", "::1"))
     DATABASES = {
         "default": dj_database_url.config(
             default=DATABASE_URL,
             conn_max_age=600,
-            ssl_require=True,
+            ssl_require=not _is_local,
         )
     }
 else:
