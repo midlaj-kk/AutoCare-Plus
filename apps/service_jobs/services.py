@@ -65,8 +65,18 @@ def transition_job_status(job, new_status, actor=None):
     return job
 
 
+def _get_mechanic(mechanic_id):
+    from apps.accounts.models import User
+
+    try:
+        return User.objects.get(id=mechanic_id, role=User.Role.MECHANIC)
+    except User.DoesNotExist:
+        raise InvalidTransitionError(f"Mechanic {mechanic_id} not found.")
+
+
 def assign_mechanic(job, mechanic_id):
-    job.assigned_mechanic_id = mechanic_id
+    mechanic = _get_mechanic(mechanic_id)
+    job.assigned_mechanic = mechanic
     if job.status == JOB_STATUS_WAITING:
         job.status = JOB_STATUS_IN_PROGRESS
     job.save(update_fields=["assigned_mechanic", "status", "updated_at"])
@@ -74,6 +84,7 @@ def assign_mechanic(job, mechanic_id):
 
 
 def change_mechanic(job, mechanic_id):
-    job.assigned_mechanic_id = mechanic_id
+    mechanic = _get_mechanic(mechanic_id)
+    job.assigned_mechanic = mechanic
     job.save(update_fields=["assigned_mechanic", "updated_at"])
     return job

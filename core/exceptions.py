@@ -1,3 +1,5 @@
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 from rest_framework.views import exception_handler
 from rest_framework.response import Response
 
@@ -43,6 +45,24 @@ def custom_exception_handler(exc, context):
     if isinstance(exc, HasActiveDependentsError):
         return Response(
             {"success": False, "message": str(exc), "errors": {}}, status=409
+        )
+    if isinstance(exc, ObjectDoesNotExist):
+        return Response(
+            {
+                "success": False,
+                "message": "The requested record does not exist.",
+                "errors": {},
+            },
+            status=404,
+        )
+    if isinstance(exc, IntegrityError):
+        return Response(
+            {
+                "success": False,
+                "message": "The request conflicts with existing data.",
+                "errors": {},
+            },
+            status=409,
         )
 
     return Response(

@@ -73,16 +73,22 @@ class ServiceJobViewSet(viewsets.ModelViewSet):
         job = self.get_object()
         serializer = AssignMechanicSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        assign_mechanic(job, serializer.validated_data["mechanic_id"])
-        return Response({"success": True, "message": "Mechanic assigned."})
+        try:
+            assign_mechanic(job, serializer.validated_data["mechanic_id"])
+            return Response({"success": True, "message": "Mechanic assigned."})
+        except Exception as e:
+            return Response({"success": False, "message": str(e)}, status=409)
 
     @action(detail=True, methods=["patch"])
     def change_mechanic(self, request, pk=None):
         job = self.get_object()
         serializer = AssignMechanicSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        change_mechanic(job, serializer.validated_data["mechanic_id"])
-        return Response({"success": True, "message": "Mechanic changed."})
+        try:
+            change_mechanic(job, serializer.validated_data["mechanic_id"])
+            return Response({"success": True, "message": "Mechanic changed."})
+        except Exception as e:
+            return Response({"success": False, "message": str(e)}, status=409)
 
     @action(detail=True, methods=["patch"])
     def status(self, request, pk=None):
