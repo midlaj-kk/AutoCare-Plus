@@ -12,6 +12,8 @@ def create_user(name, email, phone, role, password, specialization=None):
         phone=phone,
         role=role,
         specialization=specialization,
+        is_staff=role == "admin",
+        is_superuser=role == "admin",
     )
     return user
 

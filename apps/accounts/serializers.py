@@ -24,9 +24,13 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         password = validated_data.pop("password")
+        role = validated_data.get("role")
         user = User(**validated_data)
         user.set_password(password)
         user.username = validated_data["email"]
+        if role == "admin":
+            user.is_staff = True
+            user.is_superuser = True
         user.save()
         return user
 
