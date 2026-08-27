@@ -11,7 +11,7 @@ from apps.service_jobs.serializers import ServiceJobSerializer
 
 
 class MechanicViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.filter(role="mechanic")
+    queryset = User.objects.filter(role="mechanic").order_by("id")
     serializer_class = UserSerializer
     filter_backends = [SearchFilter]
     search_fields = ["name", "email", "phone"]

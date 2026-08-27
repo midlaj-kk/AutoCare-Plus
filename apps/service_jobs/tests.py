@@ -42,6 +42,29 @@ class ServiceJobAPITestCase(APITestCase):
         self.client.force_authenticate(user=self.advisor)
 
 
+class MechanicListPermissionTest(ServiceJobAPITestCase):
+    def test_service_advisor_can_list_mechanics(self):
+        response = self.client.get("/api/v1/mechanics/")
+        self.assertEqual(response.status_code, 200)
+        results = response.data.get("results", response.data)
+        ids = [item["id"] for item in results]
+        self.assertIn(self.mechanic.id, ids)
+        self.assertNotIn(self.advisor.id, ids)
+
+    def test_service_advisor_cannot_create_mechanic(self):
+        response = self.client.post(
+            "/api/v1/mechanics/",
+            {
+                "name": "New Mechanic",
+                "email": "new@example.com",
+                "phone": "9876500000",
+                "password": "testpass123",
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, 403)
+
+
 class AssignMechanicAPITest(ServiceJobAPITestCase):
     def test_assign_mechanic_success(self):
         response = self.client.patch(
